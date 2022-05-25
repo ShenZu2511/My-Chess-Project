@@ -6,6 +6,8 @@
 	+ search directory->Compiler rồi add link dẫn tới ...\src\include\SDL2 và ...\src\sdl2imageinclude
 	+ search directory->Linker rồi add link dẫn tới ...\src\lib và ...\src\sdl2imagelib
 	
+	- Chỉ để chạy chương trình thì vào bin->chạy file exe trong Release là được
+	
 2. Mô tả chung về trò chơi:
 	- Game cờ vua cơ bản có chế độ đánh với máy cơ bản và chế độ 2 người chơi
 	- Có thông tin game và bảng chức năng hỗ trợ để xoay bàn cờ, bắt đầu lại,đi lại,quay trở lại
