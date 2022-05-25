@@ -66,3 +66,10 @@ cùng lịch sử di chuyển của chúng để có thể Undo cho đúng, Ches
 		+ Render 1 trạng thái bàn cờ thì lại là kết hợp hàm trong render và vector<vector<int>> board là biểu diễn bàn cờ dạng mảng 2 chiều
 		
 	- Sử dụng kiến thức đồ họa SDL2, vector, pair, struct,...
+	
+5. Kết luận, hướng phát triển và tâm đắc rút ra khi làm ra chương trình
+	- Chương trình vẫn còn nhiều thiếu sót gây xảy ra bug trong 1 số trường hợp đặc biệt
+	- Cách xây dựng chương trình thế này không thích hợp để làm thuật toán AI nên muốn phát triển thì phải thay đổi các biểu thị trạng thái game và hầu như toàn bộ cấu trúc
+	
+	- Qua việc xây dựng chương trình ta học được cách tạo ra 1 chương trình với cấu trúc logic khá phức tạp, module hóa chương trình, quản lí game và cả cách để Debug chương trình khi gặp lỗi
+	
