@@ -608,7 +608,7 @@ bool ChessMove::valid() // check if move is valid or not
     ChessPiece piece(this->firstLoc.first,this->firstLoc.second,this->type);
     if (turn==1 and this->board[firstLoc.first][firstLoc.second]<=0) return false;
     if (turn==0 and this->board[firstLoc.first][firstLoc.second]>=0) return false;
-    piece.UpdateSquareCanMove(this->board,flip);
+    piece.UpdateSquareCanMove(board,flip);
 
     //castle case:
     bool ableToCastle=0;
@@ -646,7 +646,8 @@ bool ChessMove::valid() // check if move is valid or not
     }
     if (ableToCastle==1 and UpdateKingCheck()==1 ){
         ChessMove x=ChessMove(History,CheckCastle,firstLoc,pair<int,int>(firstLoc.first,firstLoc.second+dx),board,turn,flip);
-        if (x.UpdateKingCheck()) return true;
+        ChessMove y=ChessMove(History,CheckCastle,firstLoc,firstLoc,board,turn,flip);
+        if (x.UpdateKingCheck() and y.UpdateKingCheck()) return true;
     }
 
     //pawn across road case:
@@ -675,9 +676,11 @@ bool ChessMove::valid() // check if move is valid or not
 bool ChessMove::UpdateKingCheck()
 {
     vector<vector<int>> board_=this->board;
+    if (firstLoc==secondLoc) board_[secondLoc.first][secondLoc.second]=board_[firstLoc.first][firstLoc.second];
+    else {
     board_[secondLoc.first][secondLoc.second]=board_[firstLoc.first][firstLoc.second];
     board_[firstLoc.first][firstLoc.second]=0;
-
+    }
     vector<ChessPiece> piece;
     pair<int,int> KingPosit;
 
@@ -779,12 +782,29 @@ bool ChessMove::checkMate()
          (board_[secondLoc.first][secondLoc.second]==-6 and secondLoc.first==0 and flip==-1))
         board_[secondLoc.first][secondLoc.second]=-2;
 
-    turn=turn?0:1;
 
-    vector<ChessPiece> piece; //vector to store opponent's piece
+    vector<ChessPiece> piece; //vector to store opponent piece
     pair<int,int> KingPosit; //vector to save opponent's king 's location
 
-    if (this->turn==1){
+    if (turn==0){
+        for (int i=0;i<8;i++){
+            for (int j=0;j<8;j++){
+                if (board_[i][j]==1) KingPosit=pair<int,int>(i,j);
+                if (board_[i][j]>0) piece.push_back(ChessPiece(i,j,board_[i][j]));
+            }
+        }
+        for (unsigned int i=0;i<piece.size();i++){
+            piece[i].UpdateSquareCanMove(board_,flip);
+
+            for (unsigned int j=0;j<piece[i].SquareCanMove.size();j++){
+                ChessMove thisMove=ChessMove(History,CheckCastle,piece[i].myLocation,piece[i].SquareCanMove[j],
+                                             board_,piece[i].type,1,flip);
+                if (thisMove.valid()) return false;
+            }
+        }
+    }
+
+    if (turn==1){
         for (int i=0;i<8;i++){
             for (int j=0;j<8;j++){
                 if (board_[i][j]==-1) KingPosit=pair<int,int>(i,j);
@@ -795,30 +815,14 @@ bool ChessMove::checkMate()
             piece[i].UpdateSquareCanMove(board_,flip);
 
             for (unsigned int j=0;j<piece[i].SquareCanMove.size();j++){
-                ChessMove thisMove=ChessMove(History,CheckCastle,piece[i].myLocation,piece[i].SquareCanMove[j],board_,board_[piece[i].myLocation.first][piece[i].myLocation.second],turn,flip);
+                ChessMove thisMove=ChessMove(History,CheckCastle,piece[i].myLocation,piece[i].SquareCanMove[j],board_,
+                                             piece[i].value,0,flip);
                 if (thisMove.valid()) return false;     //if there a move valid then return false
             }
         }
     }
 
 
-    if (this->turn==0){
-        for (int i=0;i<8;i++){
-            for (int j=0;j<8;j++){
-                if (board_[i][j]==1) KingPosit=pair<int,int>(i,j);
-                if (board_[i][j]>0) piece.push_back(ChessPiece(i,j,board_[i][j]));
-            }
-        }
-        for (unsigned int i=0;i<piece.size();i++){
-            piece[i].UpdateSquareCanMove(board_,flip);
-
-
-            for (unsigned int j=0;j<piece[i].SquareCanMove.size();j++){
-                ChessMove thisMove=ChessMove(History,CheckCastle,piece[i].myLocation,piece[i].SquareCanMove[j],board_,board_[piece[i].myLocation.first][piece[i].myLocation.second],0);
-                if (thisMove.valid()) return false;
-            }
-        }
-    }
 
     return true;
 }
