@@ -93,6 +93,7 @@ bool Game::GetMoveInfo (ChessMove &chessmove) // Get info when play game include
             {
                 int j=(mouse.x-37)/73;
                 int i=(mouse.y-37)/73;
+                if (i>7 or j>7) break;
                 cout  << i << " " << j << " " << status <<  endl;
                 if (status==0){
                     firstLoc=pair<int,int>(i,j);
@@ -247,10 +248,12 @@ void Game::Move(ChessMove &chessmove) //  change the board
 
     this->History.push_back(board);
 
+    /*
     //say CHECK! if check the opponent's king
-    if (chessmove.checkMate())
+    if (chessmove.checkMate()){
+        cout << "checkmate\n";
         MessageCheckMate(this->window,turn);
-    else
+    }else*/
     if (chessmove.Check()){
         cout << "check\n";
         MessageCheck(this->window);
@@ -426,14 +429,14 @@ void Game::restartGame()    //Restart all properties
     vector<vector<vector<int>>> history_;
     History=history_;
     vector<vector<int>> board_;
-    board_.push_back({-5,-4,-3,-1,-2,-3,-4,-5});
+    board_.push_back({-5,-4,-3,-2,-1,-3,-4,-5});
     board_.push_back({-6,-6,-6,-6,-6,-6,-6,-6});
     board_.push_back({ 0, 0, 0, 0, 0, 0, 0, 0});
     board_.push_back({ 0, 0, 0, 0, 0, 0, 0, 0});
     board_.push_back({ 0, 0, 0, 0, 0, 0, 0, 0});
     board_.push_back({ 0, 0, 0, 0, 0, 0, 0, 0});
     board_.push_back({ 6, 6, 6, 6, 6, 6, 6, 6});
-    board_.push_back({ 5, 4, 3, 1, 2, 3, 4, 5}); //7
+    board_.push_back({ 5, 4, 3, 2, 1, 3, 4, 5}); //7
     turn=1;
     Flip=1;
     player=0;
