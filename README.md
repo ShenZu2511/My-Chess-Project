@@ -30,9 +30,11 @@
 		+ Các quy luật đặc biệt như nhập thành (vua xe cùng đi khi vua và xe hướng nhập thành chưa đi lần nào),phong hậu,bắt tốt qua sông được xử lí bằng các hàm nằm trong ChessMove và Move 
 	
 	- Ưu điểm:
-		+ Hầu như đầy đủ logic của game cờ vua chỉ thiếu việc nhận biết hòa cờ
+		+ Hầu như đầy đủ logic của game cờ vua chỉ thiếu việc nhận biết hòa cờ, và điều kiện nhập thành không bị tướng địch giữ chân bị lỗi
+
 		
 	- Nhược điểm:
+		+ Lúc chạy chế độ 2 người chơi thì vẫn có 1 số bug làm cho truy cập vào nơi không cho phép làm ngắt chương trình
 		+ Cách xây dựng làm cho trạng thái cờ dễ hiểu hơn nhưng lại tốn nhiều dữ liệu nên không thích hợp dùng khi tạo AI
 		+ Cũng vì vậy mà AI còn yếu, không thể áp thuật toán vào với cấu trúc trạng thái trò chơi phức tạp nhiều dữ kiện nhanh gây tràn bộ nhớ
 		+ AI không có khả năng tự đi các nước cờ đặc biệt như nhập thành hay bắt tốt qua sông, vẫn có khả năng phong hậu
@@ -50,6 +52,7 @@
 		
 	- Khi đi 1 nước chiếu đối thủ thì hiện cửa sổ thông báo check
 	- Khi CheckMate thì sẽ hiện thông báo CheckMate và báo người chơi thắng, sau đó ấn R để Restart game
+	(chức năng đang bị lỗi chỉ sử dụng được ở 1 phe nên tạm bỏ ra)
 
 4. Kĩ thuật lập trình được sử dụng trong chương trình:
 	- Module hóa chương trình phân tách các file và các hàm mục đích riêng rẽ độc lập tương đối
