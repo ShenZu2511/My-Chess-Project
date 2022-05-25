@@ -9,7 +9,7 @@
 
 
 
-#ifndef GAME_H
+#ifndef GAME_H                  //this header include all main game function
 #define GAME_H
 using namespace std;
 
@@ -69,13 +69,14 @@ struct Game
 
 };
 
-bool Game::GetMoveInfo (ChessMove &chessmove) // is doing
+bool Game::GetMoveInfo (ChessMove &chessmove) // Get info when play game include Undo,Restart and Back (optionbar)
 {
-    static int status=0;
+    static int status=0;                                //when not get firstLoc and secondLoc
     static pair<int,int>firstLoc;
     static pair<int,int>secondLoc;
+
     if (status==2){
-        firstLoc=pair<int,int>(0,0);
+        firstLoc=pair<int,int>(0,0);                    //get both firstLoc and secondLoc
         secondLoc=pair<int,int>(0,0);
         status=0;
     }
@@ -119,7 +120,7 @@ bool Game::GetMoveInfo (ChessMove &chessmove) // is doing
                     {
                     case SDLK_h:
                         {
-                            drawOptionBoard(renderer);
+                            drawOptionBoard(renderer);          //open help option
                             SDL_Delay(1000);
                             renderBoard();
                             break;
@@ -127,7 +128,7 @@ bool Game::GetMoveInfo (ChessMove &chessmove) // is doing
                     case SDLK_u:
                         {
                             if (History.size()>1){
-                                this->Undo();
+                                this->Undo();               //undo
                                 renderBoard();
                                 cout << turn << endl;
                             }
@@ -135,29 +136,24 @@ bool Game::GetMoveInfo (ChessMove &chessmove) // is doing
                         }
                     case SDLK_r:
                         {
-                            restartGame();
+                            restartGame();                  //restart the game
                             break;
                         }
                     case SDLK_b:
                         {
-                            restartGame();
+                            restartGame();                      //restart and back to menu
                             menu=0;
                             break;
                         }
                     case SDLK_f:
                         {
                             Flip=(Flip==1)?-1:1;
-                            renderFlipBoard();
+                            renderFlipBoard();                  //flip the board
                             break;
                         }
                     }
-
                     break;
-
                 }
-
-
-
         }
     }
     return false;
@@ -241,16 +237,19 @@ void Game::Move(ChessMove &chessmove) //  change the board
     board[chessmove.firstLoc.first][chessmove.firstLoc.second]=0;
 
     //Pawn Evolution
-    if ((board[chessmove.secondLoc.first][chessmove.secondLoc.second]==6 and chessmove.secondLoc.first==0 and chessmove.flip==1) or (board[chessmove.secondLoc.first][chessmove.secondLoc.second]==6 and chessmove.secondLoc.first==7 and chessmove.flip ==-1))
+    if ((board[chessmove.secondLoc.first][chessmove.secondLoc.second]==6 and chessmove.secondLoc.first==0 and chessmove.flip==1)
+        or (board[chessmove.secondLoc.first][chessmove.secondLoc.second]==6 and chessmove.secondLoc.first==7 and chessmove.flip ==-1))
         board[chessmove.secondLoc.first][chessmove.secondLoc.second]=2;
 
-    if ((board[chessmove.secondLoc.first][chessmove.secondLoc.second]==-6 and chessmove.secondLoc.first==7 and chessmove.flip==1) or (board[chessmove.secondLoc.first][chessmove.secondLoc.second]==-6 and chessmove.secondLoc.first==0 and chessmove.flip==-1))
+    if ((board[chessmove.secondLoc.first][chessmove.secondLoc.second]==-6 and chessmove.secondLoc.first==7 and chessmove.flip==1)
+        or (board[chessmove.secondLoc.first][chessmove.secondLoc.second]==-6 and chessmove.secondLoc.first==0 and chessmove.flip==-1))
         board[chessmove.secondLoc.first][chessmove.secondLoc.second]=-2;
 
     this->History.push_back(board);
+
     //say CHECK! if check the opponent's king
     if (chessmove.checkMate())
-        MessageCheckMate(this->window,this->turn);
+        MessageCheckMate(this->window,turn);
     else
     if (chessmove.Check()){
         cout << "check\n";
@@ -271,14 +270,12 @@ void Game::PlayChessWithAI()
     if (turn==1) if (this->GetMoveInfo(chessmove) and chessmove.valid()){
         cout << "move";
         this->board=chessmove.board;
-        printChessBoardNum(this->board);
         this->Move(chessmove);
         printChessBoardNum(this->board);
 
     }
     if (turn==0){
         //chessmove=chooseAIChessMove(History,board,turn,CheckCastle);
-        //chessmove=AIMove(board,Flip);
         chessmove=simpleAIMove(board,Flip);
         Move(chessmove);
         printChessBoardNum(board);
@@ -288,25 +285,18 @@ void Game::PlayChessWithAI()
 
 void Game::PlayChessTwoPl()
 {
-
     ChessMove chessmove;
     if (this->GetMoveInfo(chessmove) and chessmove.valid()){
         cout << "move";
         this->board=chessmove.board;
-        printChessBoardNum(this->board);
         this->Move(chessmove);
         printChessBoardNum(this->board);
 
     }
-
-
-
 }
 
 void Game::Menu()
 {
-
-
     while(SDL_PollEvent(&(this->event))) {
         Mouse mouse;
         SDL_GetMouseState(&mouse.x,&mouse.y);
@@ -315,8 +305,7 @@ void Game::Menu()
         switch (this->menu)
         {
         case 0:
-            {
-
+            {           //when mouse come to a position in menu then change
                 if (50<mouse.x and mouse.x<77 and 485<mouse.y and mouse.y<515)
                     loadSecondCase(this->renderer);
                 else if (544<mouse.x and mouse.x<580 and 514<mouse.y and mouse.y<558)
@@ -327,17 +316,14 @@ void Game::Menu()
                 break;
             }
         case 1:
-            {
+            {   //chess vs AI
                 PlayChessWithAI();
-                //chess vs AI
-
                 break;
             }
         case 2:
             {
                 //chess 2 pl
                 this->PlayChessTwoPl();
-
             break;
 
                 break;
@@ -347,8 +333,6 @@ void Game::Menu()
                 if (mouse.x>531 and mouse.x<583 and mouse.y>49 and mouse.y<70)
                     loadInfo1(this->renderer);
                 else loadInfo(this->renderer);
-                //info
-
                 break;
             }
 
@@ -384,8 +368,6 @@ void Game::Menu()
     }
 }
 
-
-
 void Game::renderBoard()
 {
     drawChessBoard(this->renderer);
@@ -414,7 +396,7 @@ void Game::renderFlipBoard()
     renderBoard();
 }
 
-void Game::Undo()
+void Game::Undo()       //change History and KingAndRockHistory and the board too
 {
 
         vector<vector<vector<int>>> history_(History.size()-1,vector<vector<int>>(8,vector<int>(8,0)));
@@ -439,7 +421,7 @@ void Game::Undo()
 
 }
 
-void Game::restartGame()
+void Game::restartGame()    //Restart all properties
 {
     vector<vector<vector<int>>> history_;
     History=history_;

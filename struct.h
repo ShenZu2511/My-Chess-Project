@@ -2,17 +2,13 @@
 #include <vector>
 #include <stdlib.h>
 #include <stdlib.h>
-#ifndef STRUCT_H
-#define STRUCT_H
+#ifndef STRUCT_H        //this header include struct mouse for SDL Mouse, ChessPiece and ChessMove with KingAndRockHistory
+#define STRUCT_H            //to check castling case
 
 using namespace std;
 
-
-
 struct ChessPiece
 {
-    //white/black king: 1/-1; queen:2; bishop:3; knight:4;rock:5; pawn: 6;
-
     vector <pair<int,int>> SquareCanMove;
     pair<int,int> myLocation; //vi tri cua quan co mang kep
     int value; // gia tri quan co de sau nay tinh diem the co
@@ -723,15 +719,16 @@ bool ChessMove::Check()
     board_[firstLoc.first][firstLoc.second]=0;
 
     //Pawn Evolution
-    if ((board_[secondLoc.first][secondLoc.second]==6 and secondLoc.first==0 and flip==1) or (board_[secondLoc.first][secondLoc.second]==6 and secondLoc.first==7 and flip==-1))
+    if ((board_[secondLoc.first][secondLoc.second]==6 and secondLoc.first==0 and flip==1) or
+         (board_[secondLoc.first][secondLoc.second]==6 and secondLoc.first==7 and flip==-1))
         board_[secondLoc.first][secondLoc.second]=2;
 
-    if ((board_[secondLoc.first][secondLoc.second]==-6 and secondLoc.first==7 and flip==1) or (board_[secondLoc.first][secondLoc.second]==-6 and secondLoc.first==0 and flip==-1))
+    if ((board_[secondLoc.first][secondLoc.second]==-6 and secondLoc.first==7 and flip==1) or
+         (board_[secondLoc.first][secondLoc.second]==-6 and secondLoc.first==0 and flip==-1))
         board_[secondLoc.first][secondLoc.second]=-2;
 
     vector<ChessPiece> piece;
     pair<int,int> KingPosit;
-
 
     if (this->turn==1){
         for (int i=0;i<8;i++){
@@ -768,19 +765,24 @@ bool ChessMove::Check()
 bool ChessMove::checkMate()
 {
     if (this->Check()==0) return false;
-    vector<vector<int>> board_=this->board;
+    vector<vector<int>> board_=board;
+
     board_[secondLoc.first][secondLoc.second]=board_[firstLoc.first][firstLoc.second];
     board_[firstLoc.first][firstLoc.second]=0;
 
     //Pawn Evolution
-    if ((board_[secondLoc.first][secondLoc.second]==6 and secondLoc.first==0 and flip==1) or (board_[secondLoc.first][secondLoc.second]==6 and secondLoc.first==7 and flip==-1))
+    if ((board_[secondLoc.first][secondLoc.second]==6 and secondLoc.first==0 and flip==1) or
+         (board_[secondLoc.first][secondLoc.second]==6 and secondLoc.first==7 and flip==-1))
         board_[secondLoc.first][secondLoc.second]=2;
 
-    if ((board_[secondLoc.first][secondLoc.second]==-6 and secondLoc.first==7 and flip==1) or (board_[secondLoc.first][secondLoc.second]==-6 and secondLoc.first==0 and flip==-1))
+    if ((board_[secondLoc.first][secondLoc.second]==-6 and secondLoc.first==7 and flip==1) or
+         (board_[secondLoc.first][secondLoc.second]==-6 and secondLoc.first==0 and flip==-1))
         board_[secondLoc.first][secondLoc.second]=-2;
 
-    vector<ChessPiece> piece;
-    pair<int,int> KingPosit;
+    turn=turn?0:1;
+
+    vector<ChessPiece> piece; //vector to store opponent's piece
+    pair<int,int> KingPosit; //vector to save opponent's king 's location
 
     if (this->turn==1){
         for (int i=0;i<8;i++){
@@ -792,10 +794,9 @@ bool ChessMove::checkMate()
         for (unsigned int i=0;i<piece.size();i++){
             piece[i].UpdateSquareCanMove(board_,flip);
 
-
             for (unsigned int j=0;j<piece[i].SquareCanMove.size();j++){
-                ChessMove thisMove=ChessMove(History,CheckCastle,piece[i].myLocation,piece[i].SquareCanMove[j],board_,board_[piece[i].myLocation.first][piece[i].myLocation.second],0);
-                if (thisMove.valid()) return false;
+                ChessMove thisMove=ChessMove(History,CheckCastle,piece[i].myLocation,piece[i].SquareCanMove[j],board_,board_[piece[i].myLocation.first][piece[i].myLocation.second],turn,flip);
+                if (thisMove.valid()) return false;     //if there a move valid then return false
             }
         }
     }

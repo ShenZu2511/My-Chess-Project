@@ -6,7 +6,7 @@
 #include "fortest.h"
 
 using namespace std;
-#ifndef CHESSAI_H
+#ifndef CHESSAI_H               //this header include just random move and A simple AI move
 #define CHESSAI_H
 
 
@@ -148,14 +148,14 @@ ChessMove AIMove(const vector<vector<int>>& board,const bool &flip)
 ChessMove simpleAIMove(const vector<vector<int>> board,const bool& flip)
 {
     ChessMove highestMove;
-    int minPoint=-1;
+    int minPoint=1000;
     for (int i=0;i<8;i++){
         for (int j=0;j<8;j++){
             if (board[i][j]<0){
                 ChessPiece temp(i,j,board[i][j]);
                 temp.UpdateSquareCanMove(board,flip);
 
-                for (int k=0;k<temp.SquareCanMove.size();k++){
+                for (unsigned int k=0;k<temp.SquareCanMove.size();k++){
                     vector<vector<int>> tempBoard=board;
                     vector<vector<vector<int>>> history;
                     KingAndRockMoveHistory CheckCastle;

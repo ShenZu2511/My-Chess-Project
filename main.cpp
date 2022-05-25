@@ -8,10 +8,8 @@ using namespace std;
 #undef main
 
 int main()
-{
-
-    Game game;//first setup
-
+{   //init game
+    Game game;
     //the game loop
     while (true){
         //menu

@@ -814,3 +814,46 @@
 	<stdlib.h>
 	"fortest.h"
 
+1653434239 source:c:\users\admin\documents\my-chess-project\main.cpp
+	<iostream>
+	<windows.h>
+	"struct.h"
+	"game.h"
+
+1653434709 c:\users\admin\documents\my-chess-project\struct.h
+	<iostream>
+	<vector>
+	<stdlib.h>
+	<stdlib.h>
+
+1653434986 c:\users\admin\documents\my-chess-project\game.h
+	<iostream>
+	<SDL.h>
+	<vector>
+	<SDl_image.h>
+	"struct.h"
+	"rendering.h"
+	"fortest.h"
+	"chessai.h"
+
+1653435926 c:\users\admin\documents\my-chess-project\rendering.h
+	<iostream>
+	<SDL.h>
+	<vector>
+	<SDl_image.h>
+	"struct.h"
+
+1653433369 c:\users\admin\documents\my-chess-project\fortest.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"struct.h"
+
+1653434239 c:\users\admin\documents\my-chess-project\chessai.h
+	<iostream>
+	"struct.h"
+	<vector>
+	<time.h>
+	<stdlib.h>
+	"fortest.h"
+

@@ -5,10 +5,10 @@
 #include <SDl_image.h>
 #include "struct.h"
 
-#ifndef RENDERING_H
+#ifndef RENDERING_H                 //include base function to render game
 #define RENDERING_H
 using namespace std;
-//render game here
+
 void drawChessPiece(ChessPiece& chesspiece,SDL_Renderer* renderer)
 {
     SDL_Texture* image;
@@ -228,7 +228,7 @@ void MessageCheck(SDL_Window* window)
 
 void MessageCheckMate(SDL_Window* window,bool turn)
 {
-    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,"Info","CHECKMATE! " +turn?"White Won":"Black Won",window);
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,"Info",turn?"CHECKMATE! WHITE WON!\nPress R to restart...":"CHECKMATE! BLACKWON!\nPress R to restart...",window);
 }
 #endif // RENDERING_H
 
